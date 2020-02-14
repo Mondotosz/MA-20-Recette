@@ -9,17 +9,13 @@
  * \version 0.2
  */
 
-/**
- * to do
- * replace const with define
- * change char * to char [x] to avoid overwriting memory info
- * rethink names
- */
-
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 
-//constantes par recettes
+#pragma execution_character_set("utf-8")
+
+//constantes par recette
 //                  farine  lait    biere   eau     oeufs   sel     beurre  levure
 #define CLASSIQUES  {125,   0.25,   0.0,    0.0,    1.5,    0.5,    0.5,    0.0}
 #define BIERE       {125.0, 0.1875, 0.0625, 0.0,    1.5,    0.5,    0.5,    0.0}
@@ -28,172 +24,173 @@
 #define PANCAKE     {62.5,  0.075,  0.0,    0.0,    0.5,    0.25,   0.75,   2.5}
 
 /**
- * demande la recette souhaitee
- * @return numero de recette
+ * demander la recette souhaitée
+ * @return numéro de recette
  */
-int choixRecette() {
-    int recette;
+int choixDeRecette() {
+    int numeroDeRecette;
 
-    //affiche les choix
+    //afficher les choix
     printf("---- CHANDELEUR 2 le retour ----\n");
     printf("\n");
     printf("\n");
     printf("Choisissez la recette que vous souhaiteriez faire :\n");
-    printf("1 - crepes classiques\n");
-    printf("2 - crepes a la biere\n");
-    printf("3 - crepes legeres\n");
+    printf("1 - crêpes classiques\n");
+    printf("2 - crêpes a la bière\n");
+    printf("3 - crêpes légères\n");
     printf("4 - gauffres\n");
     printf("5 - pancake\n");
     printf("Faites votre choix :");
 
-    //attend un choix valide
+    //attendre un choix valide
     do {
         fflush(stdin);
-        scanf("%d", &recette);
-    } while (recette < 1 || recette > 5);
+        scanf("%d", &numeroDeRecette);
+    } while (numeroDeRecette < 1 || numeroDeRecette > 5);
 
-    //deduit un a la recette pour s'aligner au 0 des arrays
-    recette--;
+    //deduire 1 pour aligner le choix à l'array
+    numeroDeRecette--;
 
-    return recette;
+    return numeroDeRecette;
 }
 
 /**
- *rend le nom de la recette selectionnee dans un string
- * @param recette
+ *rend le nom de la recette selectionnée dans un string
+ * @param numeroDeRecette
  * @return nom de la recette
  */
-char *recetteChoisie(int recette) {
-    char *nomRecette;
+char *recetteChoisie(int numeroDeRecette) {
+    char *nomDeRecette;
 
-    //definit le nom selon la recette
-    switch (recette) {
+    //definir le nom selon la recette
+    switch (numeroDeRecette) {
         case 0:
-            nomRecette = "crepes classiques";
+            nomDeRecette = "crêpes classiques";
             break;
         case 1:
-            nomRecette = "crepes a la biere";
+            nomDeRecette = "crêpes a la bière";
             break;
         case 2:
-            nomRecette = "crepes legeres";
+            nomDeRecette = "crêpes légères";
             break;
         case 3:
-            nomRecette = "gauffres";
+            nomDeRecette = "gauffres";
             break;
         case 4:
-            nomRecette = "pancake";
+            nomDeRecette = "pancake";
             break;
         default:
-            nomRecette = "erreur";
+            nomDeRecette = "erreur";
     }
 
-    //feedback
+    //confirmer la selection
     printf("\n");
-    printf("Vous avez choisi la recette des %s\n", nomRecette);
+    printf("Vous avez choisi la recette des %s\n", nomDeRecette);
 
-    return nomRecette;
+    return nomDeRecette;
 }
 
 /**
- * demande le nombre de portions
- * @param nomRecette    pour l'affichage
- * @return nombre de personnes
+ * demande le nombre de personnes
+ * @param nomDeRecette    pour l'affichage
+ * @return nombre de portions
  */
-int nombrePersonnes(char *nomRecette) {
-    int nombreDePersonnes;
+int nombreDePersonnes(char *nomDeRecette) {
+    int portions;
 
     printf("\n");
-    printf("Entrez le nombre de personnes qui mangeront des %s :", nomRecette);
+    printf("Entrez le nombre de personnes qui mangeront des %s :", nomDeRecette);
 
-    //demande le nombre de personnes tant que la valeur est inferieur a 1
+    //demander le nombre de personnes tant que la valeur est inferieur a 1
     do {
         fflush(stdin);
-        scanf("%d", &nombreDePersonnes);
-    } while (nombreDePersonnes < 1);
+        scanf("%d", &portions);
+    } while (portions < 1);
 
-    return nombreDePersonnes;
+    return portions;
 }
 
 /**
- * calcul et affiche les proportions pour la recette souhaitee
- * @param recette
+ * calculer et afficher les proportions pour la recette souhaitée
+ * @param numeroDeRecette
  * @param portions
  */
-void calculProportions(int recette, int portions) {
+void calculDeProportions(int numeroDeRecette, int portions) {
     float classiques[] = CLASSIQUES;
     float biere[] = BIERE;
     float legeres[] = LEGERES;
     float gauffres[] = GAUFFRES;
     float pancake[] = PANCAKE;
-    float temp;
+    float proportion;
 
     printf("\n");
-    printf("Les ingredients necessaires pour %d personnes sont :\n", portions);
+    printf("Les ingrédients nécessaires pour %d personnes sont :\n", portions);
 
-    //calcul les proportions pour chaque ingredients et les affiche
+    //calculer les proportions pour chaques ingredients et les afficher
     for (int i = 0; i < 8; ++i) {
 
-        //recuperer la quantite
-        switch (recette) {
+        //recuperer la quantité pour la recette
+        switch (numeroDeRecette) {
             case 0:
-                temp = classiques[i];
+                proportion = classiques[i];
                 break;
             case 1:
-                temp = biere[i];
+                proportion = biere[i];
                 break;
             case 2:
-                temp = legeres[i];
+                proportion = legeres[i];
                 break;
             case 3:
-                temp = gauffres[i];
+                proportion = gauffres[i];
                 break;
             case 4:
-                temp = pancake[i];
+                proportion = pancake[i];
                 break;
             default:
                 printf("\n");
-                printf("Erreur choix de recette invalid lors du calcul\n");
+                printf("Le numéro de recette indiqué pour le calcul est invalide : %d\n", numeroDeRecette);
+                proportion = 0;
                 break;
         }
 
-        //calcule la quantite necessaire
-        temp *= portions;
+        //calculer la quantité nécessaire
+        proportion *= portions;
 
-        //retourne la quantite dans le bon format si elle est superieure a 0
-        if (temp > 0)
+        //retourner la quantité dans le bon format si elle est supérieure a 0
+        if (proportion > 0)
             switch (i) {
                 case 0:
-                    printf("Farine : %.2f g\n", temp);
+                    printf("Farine : %.2f g\n", proportion);
                     break;
                 case 1:
-                    printf("Lait : %.2f l\n", temp);
+                    printf("Lait : %.2f l\n", proportion);
                     break;
                 case 2:
-                    printf("Biere : %.2f l\n", temp);
+                    printf("Bière : %.2f l\n", proportion);
                     break;
                 case 3:
-                    printf("Eau : %.2f l\n", temp);
+                    printf("Eau : %.2f l\n", proportion);
                     break;
                 case 4:
-                    printf("Oeufs : %.f\n", temp);
+                    printf("Oeufs : %.f\n", proportion);
                     break;
                 case 5:
-                    printf("Sel : %.f pincees\n", temp);
+                    printf("Sel : %.f pincées\n", proportion);
                     break;
                 case 6:
-                    printf("Beurre : %.f cuilleres\n", temp);
+                    printf("Beurre : %.f cuillères\n", proportion);
                     break;
                 case 7:
-                    printf("Levure : %.f g\n", temp);
+                    printf("Levure : %.f g\n", proportion);
                     break;
                 default:
-                    printf("erreur lors de l'affichage des quantites\n");
+                    printf("Ingrédient non reconnu : %d\n", i);
             }
     }
 
     //feedback de fin de fonction
     printf("\n");
-    printf("Bonne degustation !\n");
+    printf("Bonne dégustation !\n");
 }
 
 /**
@@ -201,17 +198,18 @@ void calculProportions(int recette, int portions) {
  * @return 0
  */
 int main() {
-    int recette, portions;
-    char *nomRecette;
+    int numeroDeRecette, portions;
+    char *nomDeRecette;
+    SetConsoleOutputCP(65001);
 
-    //choisir la recette
-    recette = choixRecette();
-    //confirmeer la recette et sortir son nom
-    nomRecette = recetteChoisie(recette);
+    //choisir une recette
+    numeroDeRecette = choixDeRecette();
+    //confirmer la recette et récupérer son nom
+    nomDeRecette = recetteChoisie(numeroDeRecette);
     //demander le nombre de portions
-    portions = nombrePersonnes(nomRecette);
+    portions = nombreDePersonnes(nomDeRecette);
     //calculer les proportions
-    calculProportions(recette, portions);
+    calculDeProportions(numeroDeRecette, portions);
 
     system("pause");
     return 0;
