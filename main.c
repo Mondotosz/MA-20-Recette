@@ -7,6 +7,11 @@
  * \author augsburger kenan
  * \date 14.02.2020
  * \version 0.2
+ * ------------------------
+ * \name Recette array 2d
+ * \author augsburger kenan
+ * \date 14.02.2020
+ * \version 0.3
  */
 
 #include <stdio.h>
@@ -15,13 +20,15 @@
 
 #pragma execution_character_set("utf-8")
 
-//constantes par recette
-//                  farine  lait    biere   eau     oeufs   sel     beurre  levure
-#define CLASSIQUES  {125,   0.25,   0.0,    0.0,    1.5,    0.5,    0.5,    0.0}
-#define BIERE       {125.0, 0.1875, 0.0625, 0.0,    1.5,    0.5,    0.5,    0.0}
-#define LEGERES     {125.0, 0.0,    0.0,    0.25,   1.5,    0.5,    0.5,    0.0}
-#define GAUFFRES    {75.0,  0.125,  0.0,    0.0,    0.5,    0.5,    1.0,    2.5}
-#define PANCAKE     {62.5,  0.075,  0.0,    0.0,    0.5,    0.25,   0.75,   2.5}
+#define NOMBRE_DE_RECETTES 5
+#define NOMBRE_D_INGREDIENTS 8
+
+//                                                                 farine,lait,   biere,  eau, oeufs,sel,beurre,levure
+const float RECETTES[NOMBRE_DE_RECETTES][NOMBRE_D_INGREDIENTS] = {{125.0, 0.25,   0.0,    0.0,  1.5, 0.5,  0.5,  0.0},/*Classique*/
+                                                                  {125.0, 0.1875, 0.0625, 0.0,  1.5, 0.5,  0.5,  0.0},/*Biere*/
+                                                                  {125.0, 0.0,    0.0,    0.25, 1.5, 0.5,  0.5,  0.0},/*Legeres*/
+                                                                  {75.0,  0.125,  0.0,    0.0,  0.5, 0.5,  1.0,  2.5},/*Gauffres*/
+                                                                  {62.5,  0.075,  0.0,    0.0,  0.5, 0.25, 0.75, 2.5}};/*Pancake*/
 
 /**
  * demander la recette souhaitée
@@ -48,21 +55,21 @@ int choixDeRecette() {
         scanf("%d", &numeroDeRecette);
     } while (numeroDeRecette < 1 || numeroDeRecette > 5);
 
-    //deduire 1 pour aligner le choix à l'array
+    //déduire 1 pour aligner le choix à l'array
     numeroDeRecette--;
 
     return numeroDeRecette;
 }
 
 /**
- *rend le nom de la recette selectionnée dans un string
+ *rend le nom de la recette sélectionnée dans un string
  * @param numeroDeRecette
  * @return nom de la recette
  */
 char *recetteChoisie(int numeroDeRecette) {
     char *nomDeRecette;
 
-    //definir le nom selon la recette
+    //définir le nom selon la recette
     switch (numeroDeRecette) {
         case 0:
             nomDeRecette = "crêpes classiques";
@@ -101,7 +108,7 @@ int nombreDePersonnes(char *nomDeRecette) {
     printf("\n");
     printf("Entrez le nombre de personnes qui mangeront des %s :", nomDeRecette);
 
-    //demander le nombre de personnes tant que la valeur est inferieur a 1
+    //demander le nombre de personnes tant que la valeur est inférieur a 1
     do {
         fflush(stdin);
         scanf("%d", &portions);
@@ -116,42 +123,16 @@ int nombreDePersonnes(char *nomDeRecette) {
  * @param portions
  */
 void calculDeProportions(int numeroDeRecette, int portions) {
-    float classiques[] = CLASSIQUES;
-    float biere[] = BIERE;
-    float legeres[] = LEGERES;
-    float gauffres[] = GAUFFRES;
-    float pancake[] = PANCAKE;
     float proportion;
 
     printf("\n");
     printf("Les ingrédients nécessaires pour %d personnes sont :\n", portions);
 
-    //calculer les proportions pour chaques ingredients et les afficher
+    //calculer les proportions pour chaque ingredients et les afficher
     for (int i = 0; i < 8; ++i) {
 
-        //recuperer la quantité pour la recette
-        switch (numeroDeRecette) {
-            case 0:
-                proportion = classiques[i];
-                break;
-            case 1:
-                proportion = biere[i];
-                break;
-            case 2:
-                proportion = legeres[i];
-                break;
-            case 3:
-                proportion = gauffres[i];
-                break;
-            case 4:
-                proportion = pancake[i];
-                break;
-            default:
-                printf("\n");
-                printf("Le numéro de recette indiqué pour le calcul est invalide : %d\n", numeroDeRecette);
-                proportion = 0;
-                break;
-        }
+        //récupérer la quantité pour la recette
+        proportion=RECETTES[numeroDeRecette][i];
 
         //calculer la quantité nécessaire
         proportion *= portions;
