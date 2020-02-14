@@ -3,17 +3,29 @@
  * \author augsburger kenan
  * \date 13.02.2020
  * \version 0.1
+ * ------------------------
+ * \author augsburger kenan
+ * \date 14.02.2020
+ * \version 0.2
+ */
+
+/**
+ * to do
+ * replace const with define
+ * change char * to char [x] to avoid overwriting memory info
+ * rethink names
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 
-//constantes par recettes (farine/lait/biere/eau/oeufs/sel/beurre/levure)
-const float CLASSIQUES[8] = {125, 0.25f, 0, 0, 1.5f, 0.5f, 0.5f, 0};
-const float BIERE[8] = {125, 0.1875f, 0.0625f, 0, 1.5f, 0.5f, 0.5f, 0};
-const float LEGERES[8] = {125, 0, 0, 0.25f, 1.5f, 0.5f, 0.5f, 0};
-const float GAUFFRES[8] = {75, 0.125f, 0, 0, 0.5f, 0.5f, 1, 2.5f};
-const float PANCAKE[8] = {62.5f, 0.075f, 0, 0, 0.5f, 0.25f, 0.75f, 2.5f};
+//constantes par recettes
+//                  farine  lait    biere   eau     oeufs   sel     beurre  levure
+#define CLASSIQUES  {125,   0.25,   0.0,    0.0,    1.5,    0.5,    0.5,    0.0}
+#define BIERE       {125.0, 0.1875, 0.0625, 0.0,    1.5,    0.5,    0.5,    0.0}
+#define LEGERES     {125.0, 0.0,    0.0,    0.25,   1.5,    0.5,    0.5,    0.0}
+#define GAUFFRES    {75.0,  0.125,  0.0,    0.0,    0.5,    0.5,    1.0,    2.5}
+#define PANCAKE     {62.5,  0.075,  0.0,    0.0,    0.5,    0.25,   0.75,   2.5}
 
 /**
  * demande la recette souhaitee
@@ -40,6 +52,7 @@ int choixRecette() {
         scanf("%d", &recette);
     } while (recette < 1 || recette > 5);
 
+    //deduit un a la recette pour s'aligner au 0 des arrays
     recette--;
 
     return recette;
@@ -53,6 +66,7 @@ int choixRecette() {
 char *recetteChoisie(int recette) {
     char *nomRecette;
 
+    //definit le nom selon la recette
     switch (recette) {
         case 0:
             nomRecette = "crepes classiques";
@@ -73,6 +87,7 @@ char *recetteChoisie(int recette) {
             nomRecette = "erreur";
     }
 
+    //feedback
     printf("\n");
     printf("Vous avez choisi la recette des %s\n", nomRecette);
 
@@ -90,6 +105,7 @@ int nombrePersonnes(char *nomRecette) {
     printf("\n");
     printf("Entrez le nombre de personnes qui mangeront des %s :", nomRecette);
 
+    //demande le nombre de personnes tant que la valeur est inferieur a 1
     do {
         fflush(stdin);
         scanf("%d", &nombreDePersonnes);
@@ -104,27 +120,35 @@ int nombrePersonnes(char *nomRecette) {
  * @param portions
  */
 void calculProportions(int recette, int portions) {
+    float classiques[] = CLASSIQUES;
+    float biere[] = BIERE;
+    float legeres[] = LEGERES;
+    float gauffres[] = GAUFFRES;
+    float pancake[] = PANCAKE;
     float temp;
 
     printf("\n");
     printf("Les ingredients necessaires pour %d personnes sont :\n", portions);
 
+    //calcul les proportions pour chaque ingredients et les affiche
     for (int i = 0; i < 8; ++i) {
+
+        //recuperer la quantite
         switch (recette) {
             case 0:
-                temp = CLASSIQUES[i] * portions;
+                temp = classiques[i];
                 break;
             case 1:
-                temp = BIERE[i] * portions;
+                temp = biere[i];
                 break;
             case 2:
-                temp = LEGERES[i] * portions;
+                temp = legeres[i];
                 break;
             case 3:
-                temp = GAUFFRES[i] * portions;
+                temp = gauffres[i];
                 break;
             case 4:
-                temp = PANCAKE[i] * portions;
+                temp = pancake[i];
                 break;
             default:
                 printf("\n");
@@ -132,6 +156,10 @@ void calculProportions(int recette, int portions) {
                 break;
         }
 
+        //calcule la quantite necessaire
+        temp *= portions;
+
+        //retourne la quantite dans le bon format si elle est superieure a 0
         if (temp > 0)
             switch (i) {
                 case 0:
@@ -163,6 +191,7 @@ void calculProportions(int recette, int portions) {
             }
     }
 
+    //feedback de fin de fonction
     printf("\n");
     printf("Bonne degustation !\n");
 }
@@ -175,9 +204,13 @@ int main() {
     int recette, portions;
     char *nomRecette;
 
+    //choisir la recette
     recette = choixRecette();
+    //confirmeer la recette et sortir son nom
     nomRecette = recetteChoisie(recette);
+    //demander le nombre de portions
     portions = nombrePersonnes(nomRecette);
+    //calculer les proportions
     calculProportions(recette, portions);
 
     system("pause");
