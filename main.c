@@ -38,7 +38,7 @@ int choixDeRecette() {
     printf("1 - crêpes classiques\n");
     printf("2 - crêpes a la bière\n");
     printf("3 - crêpes légères\n");
-    printf("4 - gauffres\n");
+    printf("4 - gaufres\n");
     printf("5 - pancake\n");
     printf("Faites votre choix :");
 
@@ -48,21 +48,21 @@ int choixDeRecette() {
         scanf("%d", &numeroDeRecette);
     } while (numeroDeRecette < 1 || numeroDeRecette > 5);
 
-    //deduire 1 pour aligner le choix à l'array
+    //déduire 1 pour aligner le choix à l'array
     numeroDeRecette--;
 
     return numeroDeRecette;
 }
 
 /**
- *rend le nom de la recette selectionnée dans un string
+ *rend le nom de la recette sélectionnée dans un string
  * @param numeroDeRecette
  * @return nom de la recette
  */
 char *recetteChoisie(int numeroDeRecette) {
     char *nomDeRecette;
 
-    //definir le nom selon la recette
+    //définir le nom selon la recette
     switch (numeroDeRecette) {
         case 0:
             nomDeRecette = "crêpes classiques";
@@ -74,7 +74,7 @@ char *recetteChoisie(int numeroDeRecette) {
             nomDeRecette = "crêpes légères";
             break;
         case 3:
-            nomDeRecette = "gauffres";
+            nomDeRecette = "gaufres";
             break;
         case 4:
             nomDeRecette = "pancake";
@@ -101,7 +101,7 @@ int nombreDePersonnes(char *nomDeRecette) {
     printf("\n");
     printf("Entrez le nombre de personnes qui mangeront des %s :", nomDeRecette);
 
-    //demander le nombre de personnes tant que la valeur est inferieur a 1
+    //demander le nombre de personnes tant que la valeur est inférieur a 1
     do {
         fflush(stdin);
         scanf("%d", &portions);
@@ -126,10 +126,10 @@ void calculDeProportions(int numeroDeRecette, int portions) {
     printf("\n");
     printf("Les ingrédients nécessaires pour %d personnes sont :\n", portions);
 
-    //calculer les proportions pour chaques ingredients et les afficher
+    //calculer les proportions pour chaque ingredients et les afficher
     for (int i = 0; i < 8; ++i) {
 
-        //recuperer la quantité pour la recette
+        //récupérer la quantité pour la recette
         switch (numeroDeRecette) {
             case 0:
                 proportion = classiques[i];
