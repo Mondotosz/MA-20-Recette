@@ -17,11 +17,17 @@
  * \author augsburger kenan
  * \date 17.02.2020
  * \version 0.3
+ * -----------------------
+ * \name Recette struct v2
+ * \author augsburger kenan
+ * \date 17.02.2020
+ * \version
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
+#include <string.h>
 
 #pragma execution_character_set("utf-8")
 
@@ -30,21 +36,44 @@
 
 typedef struct {
     char nom[10];
-    float ingredient[NOMBRE_D_INGREDIENTS];
+    float quantite[NOMBRE_D_INGREDIENTS];
 } bettyBossy;
-//                                                      recette,                  farine,             lait,                 bière,               eau,               oeufs,             sel,               beurre,            levure
+//                                                      recette,                  farine,           lait,              bière,              eau,              oeufs,           sel,              beurre,           levure
 const bettyBossy recette[NOMBRE_DE_RECETTES] = {{"classiques", {125.0f, 0.25f,   0.0f,    0.0f,  1.5f, 0.5f,  0.5f,  0.0f}},
                                                 {"bière",      {125.0f, 0.1875f, 0.0625f, 0.0f,  1.5f, 0.5f,  0.5f,  0.0f}},
                                                 {"légères",    {125.0f, 0.0f,    0.0f,    0.25f, 1.5f, 0.5f,  0.5f,  0.0f}},
                                                 {"gaufres",    {75.0f,  0.125f,  0.0f,    0.0f,  0.5f, 0.5f,  1.0f,  2.5f}},
                                                 {"pancakes",   {62.5f,  0.075f,  0.0f,    0.0f,  0.5f, 0.25f, 0.75f, 2.5f}}};
 
-/**
- * demander la recette souhaitée
- * @return numéro de recette
- */
-int choixDeRecette() {
+// stock les choix fait pour un usage future
+typedef struct {
     int numeroDeRecette;
+    char nom[10];
+    int portions;
+    float quantite[NOMBRE_D_INGREDIENTS];
+} choix;
+
+choix recetteChoisie;
+
+// permet d'afficher l'ingredient avec son unité
+typedef struct {
+    char nom[10];
+    char unite[15];
+} ingredients;
+
+const ingredients ingredient[NOMBRE_D_INGREDIENTS] = {{"Farine", "g"},
+                                                      {"Lait",   "l"},
+                                                      {"Bière",  "l"},
+                                                      {"Eau",    "l"},
+                                                      {"Oeufs",  ""},
+                                                      {"Sel",    "pincées"},
+                                                      {"Beurre", "cuillères"},
+                                                      {"Levure", "g"}};
+
+/**
+ * demander la recette souhaitée et stocker son numéro
+ */
+void choixDeRecette() {
 
     //afficher les choix
     printf("---- CHANDELEUR 2 le retour ----\n");
@@ -61,89 +90,56 @@ int choixDeRecette() {
     //attendre un choix valide
     do {
         fflush(stdin);
-        scanf("%d", &numeroDeRecette);
-    } while (numeroDeRecette < 1 || numeroDeRecette > NOMBRE_DE_RECETTES);
+        scanf("%d", &recetteChoisie.numeroDeRecette);
+    } while (recetteChoisie.numeroDeRecette < 1 || recetteChoisie.numeroDeRecette > NOMBRE_DE_RECETTES);
 
     //déduire 1 pour aligner le choix à l'array
-    numeroDeRecette--;
+    recetteChoisie.numeroDeRecette--;
 
-    //confirmer la selection
+    //stocker et confirmer la sélection
+    strcpy(recetteChoisie.nom, recette[recetteChoisie.numeroDeRecette].nom);
     printf("\n");
-    printf("Vous avez choisi la recette des %s\n", recette[numeroDeRecette].nom);
+    printf("Vous avez choisi la recette des %s\n", recetteChoisie.nom);
 
-    return numeroDeRecette;
 }
 
 /**
- * demande le nombre de personnes
- * @param numeroDeRecette  pour l'affichage
- * @return nombre de portions
+ * demander le nombre de personnes et le stocker dans recetteChoisie
  */
-int nombreDePersonnes(int numeroDeRecette) {
-    int portions;
+void nombreDePersonnes() {
 
     printf("\n");
-    printf("Entrez le nombre de personnes qui mangeront des %s :", recette[numeroDeRecette].nom);
+    printf("Entrez le nombre de personnes qui mangeront des %s :", recetteChoisie.nom);
 
     //demander le nombre de personnes tant que la valeur est inférieur a 1
     do {
         fflush(stdin);
-        scanf("%d", &portions);
-    } while (portions < 1);
+        scanf("%d", &recetteChoisie.portions);
+    } while (recetteChoisie.portions < 1);
 
-    return portions;
 }
 
 /**
- * calculer et afficher les proportions pour la recette souhaitée
- * @param numeroDeRecette
- * @param portions
+ * calculer, stocker et afficher les proportions pour la recette souhaitée
  */
-void calculDeProportions(int numeroDeRecette, int portions) {
-    float proportion;
+void calculDeProportions() {
 
     printf("\n");
-    printf("Les ingrédients nécessaires pour %d personnes sont :\n", portions);
+    printf("Les ingrédients nécessaires pour %d personnes sont :\n", recetteChoisie.portions);
 
     //calculer les proportions pour chaque ingredients et les afficher
     for (int i = 0; i < 8; ++i) {
 
         //récupérer la quantité pour la recette
-        proportion = recette[numeroDeRecette].ingredient[i];
+        recetteChoisie.quantite[i] = recette[recetteChoisie.numeroDeRecette].quantite[i];
 
         //calculer la quantité nécessaire
-        proportion *= portions;
+        recetteChoisie.quantite[i] *= recetteChoisie.portions;
 
         //retourner la quantité dans le bon format si elle est supérieure a 0
-        if (proportion > 0)
-            switch (i) {
-                case 0:
-                    printf("Farine : %.2f g\n", proportion);
-                    break;
-                case 1:
-                    printf("Lait : %.2f l\n", proportion);
-                    break;
-                case 2:
-                    printf("Bière : %.2f l\n", proportion);
-                    break;
-                case 3:
-                    printf("Eau : %.2f l\n", proportion);
-                    break;
-                case 4:
-                    printf("Oeufs : %.f\n", proportion);
-                    break;
-                case 5:
-                    printf("Sel : %.f pincées\n", proportion);
-                    break;
-                case 6:
-                    printf("Beurre : %.f cuillères\n", proportion);
-                    break;
-                case 7:
-                    printf("Levure : %.f g\n", proportion);
-                    break;
-                default:
-                    printf("Ingrédient non reconnu : %d\n", i);
-            }
+        if (recetteChoisie.quantite[i] > 0)
+            printf("%s : %g %s\n", ingredient[i].nom, recetteChoisie.quantite[i], ingredient[i].unite);
+
     }
 
     //feedback de fin de fonction
@@ -156,15 +152,14 @@ void calculDeProportions(int numeroDeRecette, int portions) {
  * @return 0
  */
 int main() {
-    int numeroDeRecette, portions;
     SetConsoleOutputCP(65001);
 
     //choisir une recette
-    numeroDeRecette = choixDeRecette();
+    choixDeRecette();
     //demander le nombre de portions
-    portions = nombreDePersonnes(numeroDeRecette);
+    nombreDePersonnes();
     //calculer les proportions
-    calculDeProportions(numeroDeRecette, portions);
+    calculDeProportions();
 
     system("pause");
     return 0;
