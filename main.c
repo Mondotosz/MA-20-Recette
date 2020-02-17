@@ -12,6 +12,11 @@
  * \author augsburger kenan
  * \date 14.02.2020
  * \version 0.3
+ * ------------------------
+ * \name Recette struct v1
+ * \author augsburger kenan
+ * \date 17.02.2020
+ * \version 0.3
  */
 
 #include <stdio.h>
@@ -23,12 +28,16 @@
 #define NOMBRE_DE_RECETTES 5
 #define NOMBRE_D_INGREDIENTS 8
 
-//                                                                 farine,  lait,   bière,   eau,   oeufs,sel,   beurre,levure
-const float RECETTES[NOMBRE_DE_RECETTES][NOMBRE_D_INGREDIENTS] = {{125.0f, 0.25f,   0.0f,    0.0f,  1.5f, 0.5f,  0.5f,  0.0f},/*Classique*/
-                                                                  {125.0f, 0.1875f, 0.0625f, 0.0f,  1.5f, 0.5f,  0.5f,  0.0f},/*Bière*/
-                                                                  {125.0f, 0.0f,    0.0f,    0.25f, 1.5f, 0.5f,  0.5f,  0.0f},/*Légères*/
-                                                                  {75.0f,  0.125f,  0.0f,    0.0f,  0.5f, 0.5f,  1.0f,  2.5f},/*Gaufres*/
-                                                                  {62.5f,  0.075f,  0.0f,    0.0f,  0.5f, 0.25f, 0.75f, 2.5f}};/*Pancake*/
+typedef struct {
+    char nom[10];
+    float ingredient[NOMBRE_D_INGREDIENTS];
+} bettyBossy;
+//                                                      recette,                  farine,             lait,                 bière,               eau,               oeufs,             sel,               beurre,            levure
+const bettyBossy recette[NOMBRE_DE_RECETTES] = {{"classiques", {125.0f, 0.25f,   0.0f,    0.0f,  1.5f, 0.5f,  0.5f,  0.0f}},
+                                                {"bière",      {125.0f, 0.1875f, 0.0625f, 0.0f,  1.5f, 0.5f,  0.5f,  0.0f}},
+                                                {"légères",    {125.0f, 0.0f,    0.0f,    0.25f, 1.5f, 0.5f,  0.5f,  0.0f}},
+                                                {"gaufres",    {75.0f,  0.125f,  0.0f,    0.0f,  0.5f, 0.5f,  1.0f,  2.5f}},
+                                                {"pancakes",   {62.5f,  0.075f,  0.0f,    0.0f,  0.5f, 0.25f, 0.75f, 2.5f}}};
 
 /**
  * demander la recette souhaitée
@@ -53,60 +62,28 @@ int choixDeRecette() {
     do {
         fflush(stdin);
         scanf("%d", &numeroDeRecette);
-    } while (numeroDeRecette < 1 || numeroDeRecette > 5);
+    } while (numeroDeRecette < 1 || numeroDeRecette > NOMBRE_DE_RECETTES);
 
     //déduire 1 pour aligner le choix à l'array
     numeroDeRecette--;
+
+    //confirmer la selection
+    printf("\n");
+    printf("Vous avez choisi la recette des %s\n", recette[numeroDeRecette].nom);
 
     return numeroDeRecette;
 }
 
 /**
- *rend le nom de la recette sélectionnée dans un string
- * @param numeroDeRecette
- * @return nom de la recette
- */
-char *recetteChoisie(int numeroDeRecette) {
-    char *nomDeRecette;
-
-    //définir le nom selon la recette
-    switch (numeroDeRecette) {
-        case 0:
-            nomDeRecette = "crêpes classiques";
-            break;
-        case 1:
-            nomDeRecette = "crêpes a la bière";
-            break;
-        case 2:
-            nomDeRecette = "crêpes légères";
-            break;
-        case 3:
-            nomDeRecette = "gaufres";
-            break;
-        case 4:
-            nomDeRecette = "pancake";
-            break;
-        default:
-            nomDeRecette = "erreur";
-    }
-
-    //confirmer la selection
-    printf("\n");
-    printf("Vous avez choisi la recette des %s\n", nomDeRecette);
-
-    return nomDeRecette;
-}
-
-/**
  * demande le nombre de personnes
- * @param nomDeRecette    pour l'affichage
+ * @param numeroDeRecette  pour l'affichage
  * @return nombre de portions
  */
-int nombreDePersonnes(char *nomDeRecette) {
+int nombreDePersonnes(int numeroDeRecette) {
     int portions;
 
     printf("\n");
-    printf("Entrez le nombre de personnes qui mangeront des %s :", nomDeRecette);
+    printf("Entrez le nombre de personnes qui mangeront des %s :", recette[numeroDeRecette].nom);
 
     //demander le nombre de personnes tant que la valeur est inférieur a 1
     do {
@@ -132,7 +109,7 @@ void calculDeProportions(int numeroDeRecette, int portions) {
     for (int i = 0; i < 8; ++i) {
 
         //récupérer la quantité pour la recette
-        proportion = RECETTES[numeroDeRecette][i];
+        proportion = recette[numeroDeRecette].ingredient[i];
 
         //calculer la quantité nécessaire
         proportion *= portions;
@@ -180,15 +157,12 @@ void calculDeProportions(int numeroDeRecette, int portions) {
  */
 int main() {
     int numeroDeRecette, portions;
-    char *nomDeRecette;
     SetConsoleOutputCP(65001);
 
     //choisir une recette
     numeroDeRecette = choixDeRecette();
-    //confirmer la recette et récupérer son nom
-    nomDeRecette = recetteChoisie(numeroDeRecette);
     //demander le nombre de portions
-    portions = nombreDePersonnes(nomDeRecette);
+    portions = nombreDePersonnes(numeroDeRecette);
     //calculer les proportions
     calculDeProportions(numeroDeRecette, portions);
 
