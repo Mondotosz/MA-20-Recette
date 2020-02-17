@@ -1,27 +1,8 @@
 /**
- * \name Recette
- * \author augsburger kenan
- * \date 13.02.2020
- * \version 0.1
- * ------------------------
- * \author augsburger kenan
- * \date 14.02.2020
- * \version 0.2
- * ------------------------
- * \name Recette array 2d
- * \author augsburger kenan
- * \date 14.02.2020
- * \version 0.3
- * ------------------------
- * \name Recette struct v1
- * \author augsburger kenan
- * \date 17.02.2020
- * \version 0.3
- * -----------------------
  * \name Recette struct v2
  * \author augsburger kenan
  * \date 17.02.2020
- * \version
+ * \version 0.4
  */
 
 #include <stdio.h>
@@ -35,15 +16,15 @@
 #define NOMBRE_D_INGREDIENTS 8
 
 typedef struct {
-    char nom[10];
+    char nom[30];
     float quantite[NOMBRE_D_INGREDIENTS];
 } bettyBossy;
 //                                                      recette,                  farine,           lait,              bière,              eau,              oeufs,           sel,              beurre,           levure
-const bettyBossy recette[NOMBRE_DE_RECETTES] = {{"classiques", {125.0f, 0.25f,   0.0f,    0.0f,  1.5f, 0.5f,  0.5f,  0.0f}},
-                                                {"bière",      {125.0f, 0.1875f, 0.0625f, 0.0f,  1.5f, 0.5f,  0.5f,  0.0f}},
-                                                {"légères",    {125.0f, 0.0f,    0.0f,    0.25f, 1.5f, 0.5f,  0.5f,  0.0f}},
-                                                {"gaufres",    {75.0f,  0.125f,  0.0f,    0.0f,  0.5f, 0.5f,  1.0f,  2.5f}},
-                                                {"pancakes",   {62.5f,  0.075f,  0.0f,    0.0f,  0.5f, 0.25f, 0.75f, 2.5f}}};
+const bettyBossy recette[NOMBRE_DE_RECETTES] = {{"crêpes classiques", {125.0f, 0.25f,   0.0f,    0.0f,  1.5f, 0.5f,  0.5f,  0.0f}},
+                                                {"crêpes à la bière", {125.0f, 0.1875f, 0.0625f, 0.0f,  1.5f, 0.5f,  0.5f,  0.0f}},
+                                                {"crêpes légères",    {125.0f, 0.0f,    0.0f,    0.25f, 1.5f, 0.5f,  0.5f,  0.0f}},
+                                                {"gaufres",           {75.0f,  0.125f,  0.0f,    0.0f,  0.5f, 0.5f,  1.0f,  2.5f}},
+                                                {"pancakes",          {62.5f,  0.075f,  0.0f,    0.0f,  0.5f, 0.25f, 0.75f, 2.5f}}};
 
 // stock les choix fait pour un usage future
 typedef struct {
