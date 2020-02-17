@@ -23,12 +23,12 @@
 #define NOMBRE_DE_RECETTES 5
 #define NOMBRE_D_INGREDIENTS 8
 
-//                                                                 farine,lait,   biere,  eau, oeufs,sel,beurre,levure
-const float RECETTES[NOMBRE_DE_RECETTES][NOMBRE_D_INGREDIENTS] = {{125.0, 0.25,   0.0,    0.0,  1.5, 0.5,  0.5,  0.0},/*Classique*/
-                                                                  {125.0, 0.1875, 0.0625, 0.0,  1.5, 0.5,  0.5,  0.0},/*Biere*/
-                                                                  {125.0, 0.0,    0.0,    0.25, 1.5, 0.5,  0.5,  0.0},/*Legeres*/
-                                                                  {75.0,  0.125,  0.0,    0.0,  0.5, 0.5,  1.0,  2.5},/*Gauffres*/
-                                                                  {62.5,  0.075,  0.0,    0.0,  0.5, 0.25, 0.75, 2.5}};/*Pancake*/
+//                                                                 farine,  lait,   bière,   eau,   oeufs,sel,   beurre,levure
+const float RECETTES[NOMBRE_DE_RECETTES][NOMBRE_D_INGREDIENTS] = {{125.0f, 0.25f,   0.0f,    0.0f,  1.5f, 0.5f,  0.5f,  0.0f},/*Classique*/
+                                                                  {125.0f, 0.1875f, 0.0625f, 0.0f,  1.5f, 0.5f,  0.5f,  0.0f},/*Bière*/
+                                                                  {125.0f, 0.0f,    0.0f,    0.25f, 1.5f, 0.5f,  0.5f,  0.0f},/*Légères*/
+                                                                  {75.0f,  0.125f,  0.0f,    0.0f,  0.5f, 0.5f,  1.0f,  2.5f},/*Gaufres*/
+                                                                  {62.5f,  0.075f,  0.0f,    0.0f,  0.5f, 0.25f, 0.75f, 2.5f}};/*Pancake*/
 
 /**
  * demander la recette souhaitée
@@ -45,7 +45,7 @@ int choixDeRecette() {
     printf("1 - crêpes classiques\n");
     printf("2 - crêpes a la bière\n");
     printf("3 - crêpes légères\n");
-    printf("4 - gauffres\n");
+    printf("4 - gaufres\n");
     printf("5 - pancake\n");
     printf("Faites votre choix :");
 
@@ -81,7 +81,7 @@ char *recetteChoisie(int numeroDeRecette) {
             nomDeRecette = "crêpes légères";
             break;
         case 3:
-            nomDeRecette = "gauffres";
+            nomDeRecette = "gaufres";
             break;
         case 4:
             nomDeRecette = "pancake";
@@ -132,7 +132,7 @@ void calculDeProportions(int numeroDeRecette, int portions) {
     for (int i = 0; i < 8; ++i) {
 
         //récupérer la quantité pour la recette
-        proportion=RECETTES[numeroDeRecette][i];
+        proportion = RECETTES[numeroDeRecette][i];
 
         //calculer la quantité nécessaire
         proportion *= portions;
