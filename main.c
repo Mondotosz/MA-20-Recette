@@ -7,6 +7,10 @@
  * \author augsburger kenan
  * \date 14.02.2020
  * \version 0.2
+ * ------------------------
+ * \author augsburger kenan
+ * \date 17.02.2020
+ * \version 1.0
  */
 
 #include <stdio.h>
@@ -20,7 +24,7 @@
 #define CLASSIQUES  {125,   0.25,   0.0,    0.0,    1.5,    0.5,    0.5,    0.0}
 #define BIERE       {125.0, 0.1875, 0.0625, 0.0,    1.5,    0.5,    0.5,    0.0}
 #define LEGERES     {125.0, 0.0,    0.0,    0.25,   1.5,    0.5,    0.5,    0.0}
-#define GAUFFRES    {75.0,  0.125,  0.0,    0.0,    0.5,    0.5,    1.0,    2.5}
+#define GAUFRES    {75.0,  0.125,  0.0,    0.0,    0.5,    0.5,    1.0,    2.5}
 #define PANCAKE     {62.5,  0.075,  0.0,    0.0,    0.5,    0.25,   0.75,   2.5}
 
 /**
@@ -119,7 +123,7 @@ void calculDeProportions(int numeroDeRecette, int portions) {
     float classiques[] = CLASSIQUES;
     float biere[] = BIERE;
     float legeres[] = LEGERES;
-    float gauffres[] = GAUFFRES;
+    float gaufres[] = GAUFRES;
     float pancake[] = PANCAKE;
     float proportion;
 
@@ -141,7 +145,7 @@ void calculDeProportions(int numeroDeRecette, int portions) {
                 proportion = legeres[i];
                 break;
             case 3:
-                proportion = gauffres[i];
+                proportion = gaufres[i];
                 break;
             case 4:
                 proportion = pancake[i];
