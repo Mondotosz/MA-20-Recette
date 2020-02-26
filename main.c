@@ -18,7 +18,7 @@ typedef struct {
     char nom[30];
     float ingredient[NOMBRE_D_INGREDIENTS];
 } bettyBossy;
-//                                                      recette,                  farine,             lait,                 bière,               eau,               oeufs,             sel,               beurre,            levure
+//                                               recette,              farine, lait,    bière,   eau,   oeufs,sel,   beurre,levure
 const bettyBossy recette[NOMBRE_DE_RECETTES] = {{"crêpes classiques", {125.0f, 0.25f,   0.0f,    0.0f,  1.5f, 0.5f,  0.5f,  0.0f}},
                                                 {"crêpes à la bière", {125.0f, 0.1875f, 0.0625f, 0.0f,  1.5f, 0.5f,  0.5f,  0.0f}},
                                                 {"crêpes légères",    {125.0f, 0.0f,    0.0f,    0.25f, 1.5f, 0.5f,  0.5f,  0.0f}},
