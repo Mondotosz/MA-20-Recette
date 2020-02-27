@@ -2,64 +2,49 @@
  * \name Recette struct v3
  * \author augsburger kenan
  * \date 26.02.2020
- * \version 0.5
+ * \version 1.0
  */
 
-//TODO:fix this
-//TODO:remove arrays from structs
+//TODO:spell check
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
-#include <string.h>
 
 #pragma execution_character_set("utf-8")
 
-#define NOMBRE_DE_RECETTES 5
-#define NOMBRE_D_INGREDIENTS 8
-#define LONGUEURE_MAX_NOM 30
+#define MAX_NAME_LENGTH 30
+#define MAX_RECIPE_ID 5
 
 typedef struct {
-    char nom[LONGUEURE_MAX_NOM];
-    float quantite[NOMBRE_D_INGREDIENTS];
-} bettyBossy;
-//                                                recette,             farine, lait,    bière,   eau,   oeufs,sel,   beurre,levure
-const bettyBossy recette[NOMBRE_DE_RECETTES] = {{"crêpes classiques", {125.0f, 0.25f,   0.0f,    0.0f,  1.5f, 0.5f,  0.5f,  0.0f}},
-                                                {"crêpes à la bière", {125.0f, 0.1875f, 0.0625f, 0.0f,  1.5f, 0.5f,  0.5f,  0.0f}},
-                                                {"crêpes légères",    {125.0f, 0.0f,    0.0f,    0.25f, 1.5f, 0.5f,  0.5f,  0.0f}},
-                                                {"gaufres",           {75.0f,  0.125f,  0.0f,    0.0f,  0.5f, 0.5f,  1.0f,  2.5f}},
-                                                {"pancakes",          {62.5f,  0.075f,  0.0f,    0.0f,  0.5f, 0.25f, 0.75f, 2.5f}}};
-
-// stock les choix fait pour un usage future
-typedef struct {
-    int numeroDeRecette;
-    char nom[LONGUEURE_MAX_NOM];
+    int id;
+    char name[MAX_NAME_LENGTH];
+    float flour;
+    float milk;
+    float beer;
+    float water;
+    float egg;
+    float salt;
+    float butter;
+    float yeast;
     int portions;
-    float quantite[NOMBRE_D_INGREDIENTS];
-} choix;
+} recipe;
 
-// permet d'afficher l'ingredient avec son unité
-typedef struct {
-    char nom[10];
-    char unite[15];
-} ingredients;
-//                                                     ingrédient unité
-const ingredients ingredient[NOMBRE_D_INGREDIENTS] = {{"Farine", "g"},
-                                                      {"Lait",   "l"},
-                                                      {"Bière",  "l"},
-                                                      {"Eau",    "l"},
-                                                      {"Oeufs",  ""},
-                                                      {"Sel",    "pincées"},
-                                                      {"Beurre", "cuillères"},
-                                                      {"Levure", "g"}};
+//available recipes
+const recipe classic = {1, "crêpes classiques", 125.f, 0.25f, 0.f, 0.f, 1.5f, 0.5f, 0.5f, 0.f, 1};
+const recipe beer = {2, "crêpes à la bière", 125.f, 0.1875f, 0.0625f, 0.f, 1.5f, 0.5f, 0.5f, 0.f, 1};
+const recipe light = {3, "crêpes légères", 125.f, 0.f, 0.f, 0.25f, 1.5f, 0.5f, 0.5f, 0.f, 1};
+const recipe waffle = {4, "gaufres", 75.f, 0.125f, 0.f, 0.f, 0.5f, 0.5f, 1.f, 2.5f, 1};
+const recipe pancake = {5, "pancakes", 62.5f, 0.075f, 0.f, 0.f, 0.5f, 0.25f, 0.75f, 2.5f, 1};
 
 /**
- * demander la recette souhaitée et stocker son numéro
+ * ask for a recipe id and returns it
+ * @param recipeID
+ * @return recipe with an id
  */
-int choixDeRecette() {
-    int numeroDeRecette;
+recipe getRecipeID(recipe recipeID) {
 
-    //afficher les choix
+    //displays available recipes
     printf("---- CHANDELEUR 2 le retour ----\n");
     printf("\n");
     printf("\n");
@@ -71,100 +56,135 @@ int choixDeRecette() {
     printf("5 - pancake\n");
     printf("Faites votre choix :");
 
-    //attendre un choix valide
+    //asks until a valid id is entered
     do {
         fflush(stdin);
-        scanf("%d", &numeroDeRecette);
-    } while (numeroDeRecette < 1 || numeroDeRecette > NOMBRE_DE_RECETTES);
+        scanf("%d", &recipeID.id);
+    } while (recipeID.id < 1 || recipeID.id > MAX_RECIPE_ID);
 
-    //déduire 1 pour aligner le choix à l'array
-    numeroDeRecette--;
-
-    return numeroDeRecette;
+    //returns the recipe with its id
+    return recipeID;
 }
 
 /**
- *rend le nom de la recette sélectionnée dans un string
- * @param numeroDeRecette
- * @return nom de la recette
+ * gets the content for the chosen recipe
+ * @param recipeWithID
+ * @return
  */
-char *nomDeRecette(int numeroDeRecette) {
-    char nomDeRecette[LONGUEURE_MAX_NOM];
+recipe getRecipe(recipe recipeWithID) {
 
-    strcpy(nomDeRecette, recette[numeroDeRecette].nom);
-
-    //confirmer la selection
-    printf("\n");
-    printf("Vous avez choisi la recette des %s\n", nomDeRecette);
-
-    return nomDeRecette;
-}
-
-/**
- * demander le nombre de personnes et le stocker dans recetteChoisie
- */
-int nombreDePersonnes(char nomDeRecette[LONGUEURE_MAX_NOM]) {
-    int portions;
-    printf("\n");
-    printf("Entrez le nombre de personnes qui mangeront des %s :", nomDeRecette);
-
-    //demander le nombre de personnes tant que la valeur est inférieur a 1
-    do {
-        fflush(stdin);
-        scanf("%d", &portions);
-    } while (portions < 1);
-
-    return portions;
-}
-
-/**
- * calculer, stocker et afficher les proportions pour la recette souhaitée
- */
-float *calculDeProportions(int numeroDeRecette, int portions) {
-    float *quantite;
-//    printf("\n");
-//    printf("Les ingrédients nécessaires pour %d personnes sont :\n", recetteChoisie.portions);
-
-    //calculer les proportions pour chaque ingredients et les afficher
-    for (int i = 0; i < NOMBRE_D_INGREDIENTS; ++i) {
-
-        //récupérer la quantité pour la recette
-        quantite[i] = recette[numeroDeRecette].quantite[i];
-
-        //calculer la quantité nécessaire
-        quantite[i] *= portions;
-
-//        //retourner la quantité dans le bon format si elle est supérieure a 0
-//        if (recetteChoisie.quantite[i] > 0)
-//            printf("%s : %g %s\n", ingredient[i].nom, recetteChoisie.quantite[i], ingredient[i].unite);
-//
+    //gets the data from a predefined recipe with the id given
+    switch (recipeWithID.id) {
+        case 1:
+            recipeWithID = classic;
+            break;
+        case 2:
+            recipeWithID = beer;
+            break;
+        case 3:
+            recipeWithID = light;
+            break;
+        case 4:
+            recipeWithID = waffle;
+            break;
+        case 5:
+            recipeWithID = pancake;
+            break;
+        default:
+            printf("unexpected id %d", recipeWithID.id);
     }
 
-    return quantite;
+    //recipe choice confirmation
+    printf("\n");
+    printf("Vous avez choisi la recette des %s\n", recipeWithID.name);
 
-//    //feedback de fin de fonction
-//    printf("\n");
-//    printf("Bonne dégustation !\n");
+    //returns the recipe with its correct content
+    return recipeWithID;
 }
 
 /**
- * programme principal
+ * gets the number of portions wanted
+ * @param recipeWithContent
+ * @return the recipe with the wanted portions added
+ */
+recipe getPortions(recipe recipeWithContent) {
+
+    printf("\n");
+    printf("Entrez le nombre de personnes qui mangeront des %s :", recipeWithContent.name);
+
+    //asks for the number of portions until a valid value is entered
+    do {
+        fflush(stdin);
+        scanf("%d", &recipeWithContent.portions);
+    } while (recipeWithContent.portions < 1);
+
+    //returns the recipe with its target number of portions
+    return recipeWithContent;
+}
+
+/**
+ * calculate the proportions for the recipe
+ * @param recipeWithPortions
+ * @return the recipe with its updated proportions
+ */
+recipe getProportions(recipe recipeWithPortions) {
+
+    //calculates the proportions for each ingredient
+    recipeWithPortions.flour *= recipeWithPortions.portions;
+    recipeWithPortions.milk *= recipeWithPortions.portions;
+    recipeWithPortions.beer *= recipeWithPortions.portions;
+    recipeWithPortions.water *= recipeWithPortions.portions;
+    recipeWithPortions.egg *= recipeWithPortions.portions;
+    recipeWithPortions.salt *= recipeWithPortions.portions;
+    recipeWithPortions.butter *= recipeWithPortions.portions;
+    recipeWithPortions.yeast *= recipeWithPortions.portions;
+
+    //returns the updated recipe
+    return recipeWithPortions;
+}
+
+/**
+ * displays the proportions for the chosen recipe
+ * @param recipeWithProportions
+ */
+void displayProportions(recipe recipeWithProportions) {
+
+    printf("\n");
+    printf("Les ingrédients nécessaires pour %d personnes sont :\n", recipeWithProportions.portions);
+
+    //displays each ingredients with it's unit if it is positive
+    if (recipeWithProportions.flour > 0)printf("Farine\t: %g g\n", recipeWithProportions.flour);
+    if (recipeWithProportions.milk > 0)printf("Lait\t: %g l\n", recipeWithProportions.milk);
+    if (recipeWithProportions.beer > 0)printf("Bière\t: %g l\n", recipeWithProportions.beer);
+    if (recipeWithProportions.water > 0)printf("Eau\t: %g l\n", recipeWithProportions.water);
+    if (recipeWithProportions.egg > 0)printf("Oeufs\t: %g\n", recipeWithProportions.egg);
+    if (recipeWithProportions.salt > 0)printf("Sel\t: %g pincées\n", recipeWithProportions.salt);
+    if (recipeWithProportions.butter > 0)printf("Beurre\t: %g cuillères\n", recipeWithProportions.butter);
+    if (recipeWithProportions.yeast > 0)printf("Levure\t: %g g\n", recipeWithProportions.yeast);
+
+}
+
+/**
+ * main program
  * @return 0
  */
 int main() {
+    //structure stocking the required data
+    recipe currentRecipe;
 
-    choix recetteChoisie;
-
+    //sets the console to output utf-8 characters
     SetConsoleOutputCP(65001);
 
-    //choisir une recette
-    recetteChoisie.numeroDeRecette=choixDeRecette();
-    //récupérer le nom de la recette
-    strcpy(recetteChoisie.nom,nomDeRecette(recetteChoisie.numeroDeRecette));
-    //demander le nombre de portions
-    recetteChoisie.portions=nombreDePersonnes(recetteChoisie.nom);
-    //calculer les proportions
-    memcpy(recetteChoisie.quantite,calculDeProportions(recetteChoisie.numeroDeRecette,recetteChoisie.portions),NOMBRE_D_INGREDIENTS);
+    //gets a recipe id
+    currentRecipe = getRecipeID(currentRecipe);
+    //gets the recipe content
+    currentRecipe = getRecipe(currentRecipe);
+    //gets the number of portions
+    currentRecipe = getPortions(currentRecipe);
+    //calculates the proportions for each ingredient
+    currentRecipe = getProportions(currentRecipe);
+    //displays the proportions
+    displayProportions(currentRecipe);
 
     system("pause");
     return 0;
