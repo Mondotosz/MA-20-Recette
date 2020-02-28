@@ -110,7 +110,7 @@ recipe getRecipe(recipe recipeWithID) {
 recipe getPortions(recipe recipeWithContent) {
 
     printf("\n");
-    printf("Entrez le nombre de personnes qui mangeront des %s :", recipeWithContent.name);
+    printf("Entrez le nombre de personnes qui mangeront des %s : ", recipeWithContent.name);
 
     //asks for the number of portions until a valid value is entered
     do {
@@ -157,10 +157,13 @@ void displayProportions(recipe recipeWithProportions) {
     if (recipeWithProportions.milk > 0)printf("Lait\t: %g l\n", recipeWithProportions.milk);
     if (recipeWithProportions.beer > 0)printf("Bière\t: %g l\n", recipeWithProportions.beer);
     if (recipeWithProportions.water > 0)printf("Eau\t: %g l\n", recipeWithProportions.water);
-    if (recipeWithProportions.egg > 0)printf("Oeufs\t: %g\n", recipeWithProportions.egg);
-    if (recipeWithProportions.salt > 0)printf("Sel\t: %g pincées\n", recipeWithProportions.salt);
-    if (recipeWithProportions.butter > 0)printf("Beurre\t: %g cuillères\n", recipeWithProportions.butter);
-    if (recipeWithProportions.yeast > 0)printf("Levure\t: %g g\n", recipeWithProportions.yeast);
+    if (recipeWithProportions.egg > 0)printf("Oeufs\t: %.0f\n", recipeWithProportions.egg);
+    if (recipeWithProportions.salt > 0)printf("Sel\t: %.0f pincées\n", recipeWithProportions.salt);
+    if (recipeWithProportions.butter > 0)printf("Beurre\t: %.0f cuillères\n", recipeWithProportions.butter);
+    if (recipeWithProportions.yeast > 0)printf("Levure\t: %.0f g\n", recipeWithProportions.yeast);
+
+    printf("\n");
+    printf("Bonne dégustation !\n");
 
 }
 
