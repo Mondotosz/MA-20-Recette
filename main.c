@@ -38,6 +38,14 @@ const recipe waffle = {4, "gaufres", 75.f, 0.125f, 0.f, 0.f, 0.5f, 0.5f, 1.f, 2.
 const recipe pancake = {5, "pancakes", 62.5f, 0.075f, 0.f, 0.f, 0.5f, 0.25f, 0.75f, 2.5f, 1};
 
 /**
+ * displays the title
+ */
+void displayTitle(){
+    printf("---- CHANDELEUR 2 le retour ----\n");
+    printf("\n");
+}
+
+/**
  * ask for a recipe id and returns it
  * @param recipeID
  * @return recipe with an id
@@ -45,16 +53,14 @@ const recipe pancake = {5, "pancakes", 62.5f, 0.075f, 0.f, 0.f, 0.5f, 0.25f, 0.7
 recipe getRecipeID(recipe recipeID) {
 
     //displays available recipes
-    printf("---- CHANDELEUR 2 le retour ----\n");
-    printf("\n");
     printf("\n");
     printf("Choisissez la recette que vous souhaiteriez faire :\n");
     printf("1 - crêpes classiques\n");
     printf("2 - crêpes a la bière\n");
     printf("3 - crêpes légères\n");
     printf("4 - gaufres\n");
-    printf("5 - pancake\n");
-    printf("Faites votre choix :");
+    printf("5 - pancakes\n");
+    printf("Faites votre choix : ");
 
     //asks until a valid id is entered
     do {
@@ -178,6 +184,8 @@ int main() {
     //sets the console to output utf-8 characters
     SetConsoleOutputCP(65001);
 
+    //displays the program title
+    displayTitle();
     //gets a recipe id
     currentRecipe = getRecipeID(currentRecipe);
     //gets the recipe content
