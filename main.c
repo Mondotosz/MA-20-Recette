@@ -1,11 +1,9 @@
 /**
  * \name Recette struct v3
  * \author augsburger kenan
- * \date 26.02.2020
- * \version 1.0
+ * \date 28.02.2020
+ * \version 1.1
  */
-
-//TODO:spell check
 
 #include <stdio.h>
 #include <stdlib.h>
